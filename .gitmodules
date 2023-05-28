@@ -1,0 +1,6 @@
+[submodule "FE-headphone-shop"]
+	path = FE-headphone-shop
+	url = https://github.com/dophuocdat/FE-headphone-shop.git
+[submodule "front-end"]
+	path = front-end
+	url = https://github.com/dophuocdat/front-end.git

@@ -1,0 +1,21 @@
+.menu-footer ul li, .another ul li {
+  position: relative;
+  transition: all 0.3s ease-in-out;
+}
+.menu-footer ul li::before, .another ul li::before {
+  content: "->";
+  position: absolute;
+  left: -20px;
+  opacity: 0;
+}
+.menu-footer ul li:hover, .another ul li:hover {
+  cursor: pointer;
+  padding-left: 20px;
+}
+.menu-footer ul li:hover::before, .another ul li:hover::before {
+  content: "->";
+  position: absolute;
+  left: 0;
+  opacity: 1;
+  transition: all 0.3s ease-in-out;
+}

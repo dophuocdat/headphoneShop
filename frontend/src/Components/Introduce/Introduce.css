@@ -1,0 +1,15 @@
+.intro-container .intro-product ul li {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+.intro-container .intro-product ul li h3 {
+  font-weight: 500;
+}
+.intro-container .intro-product ul li a {
+  text-decoration: underline;
+  color: rgb(232, 109, 109);
+  font-size: 0.8rem;
+}
