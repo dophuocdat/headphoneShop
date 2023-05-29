@@ -1,24 +1,25 @@
 package com.poly.ASM.entity;
 
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Entity
-@Table(name = "brand")
+@Table(name = "customer")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class BrandEntity {
+@Builder
+public class Customer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long brandId;
-    private String name;
-    private String country;
+    private Long customerId;
 
-    @OneToMany(mappedBy = "brand")
-    private List<ProductEntity> products;
+    private String name;
+    private String email;
+    private String password;
+
 }

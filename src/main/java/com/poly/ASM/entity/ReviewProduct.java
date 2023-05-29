@@ -19,11 +19,11 @@ public class ReviewProduct {
 
     @ManyToOne
     @JoinColumn(name = "customer_id")
-    private CustomerEntity customer;
+    private Customer customer;
 
     @ManyToOne
     @JoinColumn(name ="product_id")
-    private ProductEntity product;
+    private Product product;
 
     @Column(name = "review_text", columnDefinition = "TEXT")
     private String reviewText;

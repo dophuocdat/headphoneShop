@@ -12,14 +12,14 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class WishlistEntity {
+public class Wishlist {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long wishListId;
 
     @ManyToOne
     @JoinColumn(name = "customer_id")
-    private CustomerEntity customer;
+    private Customer customer;
 
     @ManyToMany
     @JoinTable(
@@ -27,5 +27,5 @@ public class WishlistEntity {
             joinColumns = @JoinColumn(name="wishlist_id"),
             inverseJoinColumns = @JoinColumn(name="product_id")
     )
-    private List<ProductEntity> products;
+    private List<Product> products;
 }

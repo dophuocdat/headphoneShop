@@ -1,23 +1,28 @@
 package com.poly.ASM.entity;
 
-
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
+
 @Entity
-@Table(name = "customer")
+@Table(name = "product")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CustomerEntity {
+public class Product {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long customerId;
-
+    private Long productId;
     private String name;
-    private String email;
-    private String password;
+    private String description;
+    private BigDecimal price;
+
+    @ManyToOne
+    @JoinColumn(name = "brand_id")
+    private Brand brand;
 
 }
