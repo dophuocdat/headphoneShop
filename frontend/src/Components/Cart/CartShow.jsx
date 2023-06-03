@@ -1,10 +1,15 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { RecommendationConfig } from "../ListProduct/Recommentdations/RecommendationConfig"
 import { FaTrophy } from "react-icons/fa"
-import { AiOutlinePlus, AiOutlineMinus, AiOutlineStar, AiFillLike, AiOutlineLike } from "react-icons/ai"
-import { AiFillStar } from 'react-icons/ai'
+import { AiOutlinePlus, AiOutlineMinus } from "react-icons/ai"
 import { BiImageAdd } from 'react-icons/bi'
+import { RateDisplay } from './Rate'
+import { comment } from './commentConfig'
+import Tab from './Tab'
+import TabContent from './TabContent'
+import { contentProduct } from './contentProduct'
+
 function CartShow() {
 
   const { id } = useParams();
@@ -14,12 +19,10 @@ function CartShow() {
 
   const [enterImage, setImage] = useState(null);
 
-  const [liked, setLiked] = useState(true);
-  const countLike = useState(0);
+  const [activeTab, setActiveTab] = useState(0);
 
-  const onLike = () => {
-    setLiked(!liked)
-
+  const handleTabClick = (index) => {
+    setActiveTab(index);
   }
 
 
@@ -30,9 +33,7 @@ function CartShow() {
     }
   }
 
-  /*  useEffect(() => {
-     window.scrollTo(0, 0);
-   }, []) */
+
 
   return (
     <div className='cart-container  mx-80  max-xl:mx-40 max-lg:mx-20  py-10'>
@@ -84,12 +85,42 @@ function CartShow() {
         </div>
       </div>
       <div className='tabs-detail'>
-        <ul className='flex justify-start gap-3'>
+        {/* <ul className='flex justify-start gap-3'>
           <li className={`bg-slate-400 px-2 h-10 flex items-center cursor-pointer  hover:bg-slate-600 text-white `}
           >PRODUCT DETAILS FROM THE BRAND</li>
           <li className={`bg-slate-400 px-2 h-10 flex items-center cursor-pointer  hover:bg-slate-600 text-white`}
           >PRODUCT REVIEWS</li>
-        </ul>
+
+        </ul> */}
+        <div className='flex flex-row gap-1'>
+          <Tab active={activeTab === 0} onClick={() => handleTabClick(0)} > PRODUCT DETAILS FROM THE BRAND </Tab>
+          <Tab active={activeTab === 1} onClick={() => handleTabClick(1)} >PRODUCT REVIEWS</Tab>
+
+        </div>
+        {/* Hiện thị nội dung */}
+        {activeTab === 0 && <TabContent>
+
+          {
+            contentProduct.map((item, index) => {
+              return <div>
+                <legend className='items-start flex font-bold py-2'>{item.Title}</legend>
+                <ul className={`flex flex-col items-start list-disc list-inside`}>
+                  {
+                    item.list.map((listItemm) => {
+                      return <li>{listItemm}</li>
+                    })
+                  }
+                </ul>
+              </div>
+            })
+
+          }
+
+
+        </TabContent>}
+        {activeTab === 1 && <TabContent >
+          <legend className='items-start flex font-bold text-2xl py-2'>Review</legend>
+        </TabContent>}
         <div className='tab-1-detail py-5 hidden'>
           <div className='border border-gray-400 w-full'>
             <small >Any mention of "us," "we," "our," etc is by Noble, not Audio46</small>
@@ -128,9 +159,7 @@ function CartShow() {
                 <div className='flex justify-center items-center'>
                   <h1 className='pr-3'> {product.rate} </h1>
                   {
-                    [...Array(product.rate)].map((_, index) => {
-                      return <AiFillStar key={index} className='text-yellow-400' />
-                    })
+                    <RateDisplay key={product.id} initialRate={product.rate} />
                   }
                 </div>
                 <small className='text-sm'>Based on 4 Reviews</small>
@@ -143,7 +172,7 @@ function CartShow() {
             </div>
             <div className='text-start pt-8'>
               <h4>Write a Review</h4>
-              <textarea className='w-full  outline-gray-500 border-gray-300 border-2 resize-none pl-2' rows={10} placeholder='Write review here!'></textarea>
+              <textarea className='w-full  outline-gray-500 border-gray-300 border-2 resize-none pl-2' rows={7} placeholder='Write review here!'></textarea>
               <div className="enterImage flex flex-col gap-3">
                 <div>
                   <input type="file" onChange={onImageChange}
@@ -179,63 +208,27 @@ function CartShow() {
 
               <div className="review flex flex-col gap-4 ">
                 <div className='flex flex-col gap-3 border-b-2 shadow-md'>
-                  <div className="name-reviewer flex justify-between">
-                    <span className='text-lg font-semibold'>John</span>
-                    <span>01/06/2023</span>
-                  </div>
-                  <div className="text-reviewer">
-                    <p className='line-clamp-2'>
-                      So the first thing I have to say is thanks to Tony! I came all the way to New York from Memphis and this guy took his time with me without ever pushing anything on me. He made me feel like I was already family in this store. He knew right away which IEM I needed before I did. I tried different ones but I walked out with the exact one he told me to get, the Thieaudio Oracle MK2. I had serious doubts about my choice but he made me feel so at ease. Assuring me that I could return the product if I didn’t love it. But he told, nobody returns the Oracle MK2. And so I got it and took it home with me back to Memphis where I did a couple of days of burn in and then this thing came to life. I can’t stop listening to it, so much that I decided to return my moondrop Kato’s back to Amazon. I can’t go back! So glad I came to Audio46 and met Tony!
-                    </p>
-                  </div>
-                  <div className='flex'>
-                    <button
-                      className='text-2xl flex justify-end w-full'
-                      onClick={onLike}
+                  {
+                    comment.map((item, index) => {
+                      return (
+                        <div key={index}>
+                          <div className="name-reviewer flex justify-between">
+                            <span className='text-lg font-semibold'>{item.name}</span>
+                            <span>{item.dateComment}</span>
+                          </div>
+                          <div>
+                            <img src={item.image} alt="" className='w-16 h-16 object-cover hover:scale-[2]' />
+                          </div>
+                          <div className="text-reviewer">
+                            <p className='line-clamp-2'>
+                              {item.title}
+                            </p>
+                          </div>
+                        </div>
+                      );
+                    })
+                  }
 
-                    >{liked ? <AiFillLike /> : <AiOutlineLike />}</button>
-                    <span>30</span>
-
-                  </div>
-                </div>
-                <div className='flex flex-col gap-3 border-b-2 shadow-md'>
-                  <div className="name-reviewer flex justify-between">
-                    <span className='text-lg font-semibold'>Boon</span>
-                    <span>01/06/2023</span>
-                  </div>
-                  <div className="text-reviewer">
-                    <p className='line-clamp-2'>
-                      So the first thing I have to say is thanks to Tony! I came all the way to New York from Memphis and this guy took his time with me without ever pushing anything on me. He made me feel like I was already family in this store. He knew right away which IEM I needed before I did. I tried different ones but I walked out with the exact one he told me to get, the Thieaudio Oracle MK2. I had serious doubts about my choice but he made me feel so at ease. Assuring me that I could return the product if I didn’t love it. But he told, nobody returns the Oracle MK2. And so I got it and took it home with me back to Memphis where I did a couple of days of burn in and then this thing came to life. I can’t stop listening to it, so much that I decided to return my moondrop Kato’s back to Amazon. I can’t go back! So glad I came to Audio46 and met Tony!
-                    </p>
-                  </div>
-                  <div className='flex'>
-                    <button
-                      className='text-2xl flex justify-end w-full'
-                      onClick={onLike}
-
-                    >{liked ? <AiFillLike /> : <AiOutlineLike />}</button>
-                    <span>10</span>
-
-                  </div>
-                </div>
-                <div className='flex flex-col gap-3 border-b-2 shadow-md'>
-                  <div className="name-reviewer flex justify-between">
-                    <span className='text-lg font-semibold'>Maria</span>
-                    <span>01/06/2023</span>
-                  </div>
-                  <div className="text-reviewer">
-                    <p className='line-clamp-2'>
-                      So the first thing I have to say is thanks to Tony! I came all the way to New York from Memphis and this guy took his time with me without ever pushing anything on me. He made me feel like I was already family in this store. He knew right away which IEM I needed before I did. I tried different ones but I walked out with the exact one he told me to get, the Thieaudio Oracle MK2. I had serious doubts about my choice but he made me feel so at ease. Assuring me that I could return the product if I didn’t love it. But he told, nobody returns the Oracle MK2. And so I got it and took it home with me back to Memphis where I did a couple of days of burn in and then this thing came to life. I can’t stop listening to it, so much that I decided to return my moondrop Kato’s back to Amazon. I can’t go back! So glad I came to Audio46 and met Tony!
-                    </p>
-                  </div>
-                  <div className='flex'>
-                    <button
-                      className='text-2xl flex justify-end w-full'
-                      onClick={onLike}
-
-                    >{liked ? <AiFillLike /> : <AiOutlineLike />}</button>
-                    <span>3</span>
-                  </div>
                 </div>
                 <div className='flex justify-center'>
                   <button className='bg-slate-600 w-32 h-7 rounded-sm text-white font-serif hover:bg-slate-400 hover:text-black'>View all</button>

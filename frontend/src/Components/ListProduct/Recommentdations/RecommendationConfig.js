@@ -24,7 +24,7 @@ export const RecommendationConfig = [
         hoverImg: img1,
         linkCart: "/product/cart/",
         oldPrice: "$2,999.00",
-        rate: 5
+        rate: 4
     },
     {
         id: "rm2",
@@ -44,7 +44,7 @@ export const RecommendationConfig = [
         hoverImg: img3_1,
         linkCart: "/product/cart/",
         oldPrice: "$695.00",
-        rate: 5
+        rate: 4
     },
     {
         id: "rm4",
@@ -64,7 +64,7 @@ export const RecommendationConfig = [
         hoverImg: img5_1,
         linkCart: "/product/cart/",
         oldPrice: "$349.00",
-        rate: 5
+        rate: 3
     },
     {
         id: "rm6",
@@ -84,7 +84,7 @@ export const RecommendationConfig = [
         hoverImg: img7,
         linkCart: "/product/cart/",
         oldPrice: "$799.00",
-        rate: 5
+        rate: 4
     },
     {
         id: "rm8",
@@ -94,7 +94,7 @@ export const RecommendationConfig = [
         hoverImg: img8_1,
         linkCart: "/product/cart/",
         oldPrice: "",
-        rate: 5
+        rate: 4
     },
     {
         id: "rm9",

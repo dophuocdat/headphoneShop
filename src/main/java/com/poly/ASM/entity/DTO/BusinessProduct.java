@@ -1,21 +1,21 @@
-package com.poly.ASM.entity;
+package com.poly.ASM.entity.DTO;
 
+import com.poly.ASM.entity.Customer;
+import com.poly.ASM.entity.Product;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Date;
-
 @Entity
-@Table(name = "rate_product")
+@Table(name = "business_product")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class RateProduct {
+public class BusinessProduct {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long rateId;
+    private Long id;
 
     @ManyToOne
     @JoinColumn(name = "customer_id")
@@ -24,11 +24,4 @@ public class RateProduct {
     @ManyToOne
     @JoinColumn(name = "product_id")
     private Product product;
-
-    private int rating;
-
-    @Temporal(TemporalType.DATE)
-    @Column(name = "rate_date")
-    private Date rateDate;
-
 }
