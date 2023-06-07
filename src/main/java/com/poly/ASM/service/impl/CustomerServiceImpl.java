@@ -54,6 +54,11 @@ public class CustomerServiceImpl implements CustomerService {
         customerRepository.deleteById(id);
         return "customer deleted " + id;
     }
+
+    @Override
+    public Customer login(String email, String password) {
+        return customerRepository.findByEmailAndPassword(email,password);
+    }
 }
 
 

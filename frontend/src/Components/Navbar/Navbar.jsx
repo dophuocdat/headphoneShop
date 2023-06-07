@@ -1,17 +1,34 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import './Navbar.css'
 import { Policies, mainu, shopByPice } from '../menu/menu'
 import { menuStyle } from '../menu/menuStyle'
 import { Link } from 'react-router-dom'
 import { FaBars } from 'react-icons/fa'
+import { AiOutlineCaretDown, AiOutlineCaretUp } from 'react-icons/ai'
 
-function Navbar() {
+function Navbar({ isLoggedIn, handleLogout,userId }) {
 
     const [show, setShow] = useState(false)
+    const [isDropdown, setIsDropdown] = useState(false);
 
     const showMenu = () => {
         setShow(!show)
     }
+
+    const toggleMenu = () => {
+        setIsDropdown(!isDropdown)
+    }
+
+    useEffect(()=>{
+        console.log(userId);
+    },[userId])
+
+    /*  const [isLoggedIn, setIsLoggedIn] = useState(false) */
+
+    /* const handleLogout = () => {
+        setIsLoggedIn(false)
+       
+    } */
 
 
     return (
@@ -25,7 +42,7 @@ function Navbar() {
             </div>
             <nav className={
                 `menu lg:block shrink-0 w-4/5 max-lg:absolute max-lg:top-14 max-lg:py-10  max-lg:w-[350px] max-lg:bg-slate-600 max-lg:z-50
-                ${show? 'max-lg:left-0' : 'max-lg:-left-full'}`
+                ${show ? 'max-lg:left-0' : 'max-lg:-left-full'}`
             } >
                 <ul className='gap-1 flex h-full items-center max-lg:flex-col justify-center '>
                     <li className='w-full h-10'>BLOWOUT SALE
@@ -113,8 +130,37 @@ function Navbar() {
                     <li className='w-full h-10'>BLOG</li>
                 </ul>
             </nav>
-            <div className='flex-1'>
-                <Link to={"/account"} className=''>Sign In</Link>
+            <div className='flex-1 h-full'>
+                {
+                    isLoggedIn ? (
+                        <div className='relative h-full w-full'>
+                            <button className=' w-full h-full flex  items-center justify-center cursor-pointe hover:bg-slate-400 gap-2'
+                                onClick={toggleMenu}>User
+                                {
+                                    isDropdown === false ? <AiOutlineCaretDown /> : <AiOutlineCaretUp />
+                                }
+                            </button>
+                            {
+                                isDropdown && (
+                                    <ul className='absolute top-14  z-50 bg-slate-500 flex flex-col items-start p-2 w-full gap-2'>
+                                        <li className='font-light text-sm hover:bg-red-400 w-full flex items-start p-1 cursor-pointer'>
+                                            <Link to={'/information/' + userId}>Thông tin tai khoản</Link>
+                                        </li>
+                                        <li className='font-light text-sm hover:bg-red-400 w-full flex items-start p-1 cursor-pointer'>Danh sách bán hàng</li>
+                                        <li className='font-light text-sm hover:bg-red-400 w-full flex items-start p-1 cursor-pointer'>Quản lý trang</li>
+                                        <li className='font-light text-sm hover:bg-red-400 w-full flex items-start p-1 cursor-pointer' onClick={handleLogout}
+                                        >
+                                            Logout
+                                        </li>
+                                    </ul>
+                                )
+                            }
+                        </div>
+                    ) : (
+                        <Link to={"/account"} className='flex items-center justify-center w-full h-full' onClick={toggleMenu}>Sign In</Link>
+                    )
+                }
+
             </div>
 
         </header>

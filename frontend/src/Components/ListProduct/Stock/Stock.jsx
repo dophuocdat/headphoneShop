@@ -5,14 +5,14 @@ import { motion } from "framer-motion";
 function Stock() {
     const [hoveredItems, setHoveredItems] = useState({});
 
-    const test = () => {
+   /*  const test = () => {
         StockConfig.map((item, index) => {
             console.log(item.id_feature)
         })
     }
     useEffect(() => {
         //test()
-    })
+    }) */
 
     const onHover = useCallback(
         (index) => {

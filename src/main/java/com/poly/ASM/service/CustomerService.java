@@ -14,4 +14,6 @@ public interface CustomerService {
     Customer updateCustomer(Long id, Customer newCustomer);
 
     String deleteCustomer(Long id);
+
+    Customer login(String email, String password);
 }
