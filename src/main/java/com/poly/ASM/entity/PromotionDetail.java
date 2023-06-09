@@ -1,27 +1,30 @@
-package com.poly.ASM.entity.DTO;
+package com.poly.ASM.entity;
 
-import com.poly.ASM.entity.Customer;
-import com.poly.ASM.entity.Product;
+import java.math.BigDecimal;
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "business_product")
+@Table(name = "promotion_detail")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class BusinessProduct {
+public class PromotionDetail {
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long promotionDetailId;
 
     @ManyToOne
-    @JoinColumn(name = "customer_id")
-    private Customer customer;
+    @JoinColumn(name = "promotion_id")
+    private Promotion promotion;
 
     @ManyToOne
     @JoinColumn(name = "product_id")
     private Product product;
+
+    private BigDecimal discount;
 }

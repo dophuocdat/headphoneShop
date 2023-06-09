@@ -5,6 +5,7 @@ import { menuStyle } from '../menu/menuStyle'
 import { Link } from 'react-router-dom'
 import { FaBars } from 'react-icons/fa'
 import { AiOutlineCaretDown, AiOutlineCaretUp } from 'react-icons/ai'
+import { BiUserCircle } from 'react-icons/bi'
 
 function Navbar({ isLoggedIn, handleLogout,userId }) {
 
@@ -135,7 +136,7 @@ function Navbar({ isLoggedIn, handleLogout,userId }) {
                     isLoggedIn ? (
                         <div className='relative h-full w-full'>
                             <button className=' w-full h-full flex  items-center justify-center cursor-pointe hover:bg-slate-400 gap-2'
-                                onClick={toggleMenu}>User
+                                onClick={toggleMenu}><BiUserCircle className='text-[2.5rem]'/>
                                 {
                                     isDropdown === false ? <AiOutlineCaretDown /> : <AiOutlineCaretUp />
                                 }

@@ -4,6 +4,8 @@ public record CustomerDTO(
          Long customerId,
          String name,
          String email,
-         String password
+         String password,
+         String phone,
+         String address
 ) {
 }

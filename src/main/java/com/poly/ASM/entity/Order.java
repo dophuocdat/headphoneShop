@@ -6,6 +6,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
+import java.util.List;
+
+
 
 
 @Data
@@ -18,10 +21,16 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long orderId;
 
-    @Column(name="customer_id")
-    private long customerId;
+/*     @Column(name="customer_id") */
+    @ManyToOne()
+    @JoinColumn(name = "customer_id")
+    private Customer customerId;
 
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.DATE)    
     @Column(name = "order_date")
     private Date orderDate;
+
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<OrderDetails> orderDetails;
+
 }

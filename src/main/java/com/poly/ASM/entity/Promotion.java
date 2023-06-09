@@ -1,36 +1,30 @@
 package com.poly.ASM.entity;
 
+import java.util.Date;
+import java.util.List;
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.math.BigDecimal;
-import java.util.List;
-
 @Entity
-@Table(name = "product")
+@Table(name = "promotion")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Product {
-
+public class Promotion {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long productId;
+    private Long promotionId;
+
     private String name;
     private String description;
-    private BigDecimal price;
+    private Date startDate;
+    private Date endDate;
 
-    @ManyToOne
-    @JoinColumn(name = "brand_id")
-    private Brand brand;
-
-    @Column(name = "image_url")
-    private String imageUrl;
-
-
-    @OneToMany
+    @OneToMany(mappedBy = "promotion", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PromotionDetail> promotionDetails;
-}
 
+    
+}

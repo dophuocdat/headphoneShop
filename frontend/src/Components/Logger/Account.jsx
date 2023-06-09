@@ -17,9 +17,7 @@ function Account({ isLoggedIn, handleLogin }) {
     const onInputChange = (e) => {
         setUser({ ...user, [e.target.name]: e.target.value }) // e.target.name = email or password, ...user is mean copy all user
     }
-    useEffect(() => {
-        console.log(isLoggedIn);
-      }, [isLoggedIn]);
+
 
     const onSubmit = async (e) => {
         e.preventDefault();

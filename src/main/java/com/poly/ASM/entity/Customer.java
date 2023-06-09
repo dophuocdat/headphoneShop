@@ -1,7 +1,6 @@
 package com.poly.ASM.entity;
 
 
-import com.poly.ASM.entity.DTO.BusinessProduct;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -24,18 +23,22 @@ public class Customer {
     private String name;
     private String email;
     private String password;
+    private String phone;
+    private String address;
+    private String roles;
+    private String avatar;
+    private boolean status;
+    
+    @OneToMany(mappedBy = "customerId")
+    private List<Order> orders;
 
-    @Column(name = "business_registered")
-    private boolean businessRegistered;
+    @OneToMany(mappedBy = "customer")
+    private List<RateProduct> rateProducts;
 
-    @Column(name = "business_address")
-    private String businessAddress;
+    @OneToMany(mappedBy = "customer")
+    private List<ReviewProduct> reviewProducts;
 
-    /*
-    mappedBy dung de mapping thong qua customer
-    cascade = CascadeType.All va orphanRemoval = true de khi user mat thi san pham cung se mat
-    * */
-    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<BusinessProduct> businessProducts;
+    @OneToMany(mappedBy = "customer")
+    private List<Wishlist> wishlists;
 
 }
