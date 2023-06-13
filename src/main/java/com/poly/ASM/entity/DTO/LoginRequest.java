@@ -4,5 +4,6 @@ public record LoginRequest(
                 Long id,
                 String email,
                 String password,
-                boolean status) {
+                boolean status,
+                String roles) {
 }

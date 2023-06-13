@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 @Entity
 @Table(name = "brand")
 @Data
@@ -16,9 +18,11 @@ public class Brand {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long brandId;
-    private String name;
+
+    private String brandName;
     private String country;
 
+    @JsonIgnoreProperties("brand")
     @OneToMany(mappedBy = "brand")
     private List<Product> products;
 

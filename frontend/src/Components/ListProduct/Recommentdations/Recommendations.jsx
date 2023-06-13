@@ -9,11 +9,7 @@ function Recommendations() {
 
   const [hoveredItems, setHoveredItems] = useState({});
 
-
   const [currentIndex, setCurrentIndex] = useState(0);
-
-
-
 
   const onHover = useCallback(
     (index) => {
@@ -30,18 +26,13 @@ function Recommendations() {
       }))
     }, []
   )
-
-
-
   const handlePrevious = () => {
     setCurrentIndex(currentIndex === 0 ? RecommendationConfig.length - 1 : currentIndex - 1);
   };
-
   const handleNext = () => {
     setCurrentIndex(currentIndex === RecommendationConfig.length - 1 ? 0 : currentIndex + 1);
   };
 
-  // motion
 
 
   return (

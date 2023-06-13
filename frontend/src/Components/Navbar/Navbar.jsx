@@ -21,7 +21,7 @@ function Navbar({ isLoggedIn, handleLogout,userId }) {
     }
 
     useEffect(()=>{
-        console.log(userId);
+        //console.log(userId);
     },[userId])
 
     /*  const [isLoggedIn, setIsLoggedIn] = useState(false) */
@@ -120,7 +120,7 @@ function Navbar({ isLoggedIn, handleLogout,userId }) {
                                 Policies.map(
                                     (item) => {
                                         return (
-                                            <li className='md:normal-case uppercase text-start  hover:ml-1 text-xs' >{item}</li>
+                                            <li className='md:normal-case uppercase text-start  hover:ml-1 text-xs'>{item}</li>
                                         )
                                     })
                             }
