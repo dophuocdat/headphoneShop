@@ -4,7 +4,7 @@ import axios from 'axios'
 import { FaDotCircle } from 'react-icons/fa'
 
 
-function Dashboard({ userId }) {
+function Dashboard({ userId, role }) {
     const [user, setUser] = useState({
         name: "",
         email: "",
@@ -14,18 +14,18 @@ function Dashboard({ userId }) {
         roles: ""
 
     })
-/*     const [products, setProduct] = useState({
-        brandName: "",
-        productId: "",
-        name_Product: "",
-        description: "",
-        price: "",
-        priceOld: "",
-        image: [],
-
-    }) */
-
+    /*     const [products, setProduct] = useState({
+            brandName: "",
+            productId: "",
+            name_Product: "",
+            description: "",
+            price: "",
+            priceOld: "",
+            image: [],
     
+        }) */
+
+
 
     const [brands, setBrand] = useState([])
 
@@ -54,13 +54,13 @@ function Dashboard({ userId }) {
         await axios.get('http://localhost:8080/brand/BrandName')
             .then((res) => {
                 setBrand(res.data);
-               // console.log(res.data.content);
+                // console.log(res.data.content);
             })
             .catch((err) => {
                 console.log(err);
             })
     }
-    
+
     /* const [currentPage, setCurrentPage] = useState(0);
     const [pageSize, setPageSize] = useState(5);
     const [sortField, setSortField] = useState("products.productId");   
@@ -91,16 +91,16 @@ function Dashboard({ userId }) {
             loadUser(storedUserId);
         }
         loadBrand();
-       
-        
+
+
 
     }, [])
 
-/*     useEffect(() => {
-        loadProduct();
-        console.log(totalPages);
-    }, [currentPage, pageSize, sortField, sortDirection])
- */
+    /*     useEffect(() => {
+            loadProduct();
+            console.log(totalPages);
+        }, [currentPage, pageSize, sortField, sortDirection])
+     */
     const handleMenuClick = (index) => {
         setActiveMenu(index);
 
@@ -140,12 +140,22 @@ function Dashboard({ userId }) {
                     </div>
                     <div className="menuDashboard">
                         <nav>
-                            <ul className='flex flex-col items-start'>
-                                <li className={`hover:bg-slate-400 cursor-pointer w-full flex items-start pl-5 h-10 ${activeMenu === 1 ? "bg-slate-400" : ""}`} onClick={() => handleMenuClick(1)}>Thông tin chi tiết</li>
-                                <li className={`hover:bg-slate-400 cursor-pointer w-full flex items-start pl-5 h-10 ${activeMenu === 2 ? "bg-slate-400" : ""}`} onClick={() => handleMenuClick(2)}>Kho Sản phẩm</li>
-                                <li className={`hover:bg-slate-400 cursor-pointer w-full flex items-start pl-5 h-10 ${activeMenu === 3 ? "bg-slate-400" : ""}`} onClick={() => handleMenuClick(3)}>Thêm Sản Phẩm</li>
-                                <li className={`hover:bg-slate-400 cursor-pointer w-full flex items-start pl-5 h-10 ${activeMenu === 4 ? "bg-slate-400" : ""}`} onClick={() => handleMenuClick(4)}>Nhà Cung Ứng</li>
-                            </ul>
+                            {
+                                role === "ADMIN" ? (
+                                    <ul className='flex flex-col items-start'>
+                                        <li className={`hover:bg-slate-400 cursor-pointer w-full flex items-start pl-5 h-10 ${activeMenu === 1 ? "bg-slate-400" : ""}`} onClick={() => handleMenuClick(1)}>Thông tin chi tiết</li>
+                                        <li className={`hover:bg-slate-400 cursor-pointer w-full flex items-start pl-5 h-10 ${activeMenu === 2 ? "bg-slate-400" : ""}`} onClick={() => handleMenuClick(2)}>Kho Sản phẩm</li>
+                                        <li className={`hover:bg-slate-400 cursor-pointer w-full flex items-start pl-5 h-10 ${activeMenu === 3 ? "bg-slate-400" : ""}`} onClick={() => handleMenuClick(3)}>Thêm Sản Phẩm</li>
+                                        <li className={`hover:bg-slate-400 cursor-pointer w-full flex items-start pl-5 h-10 ${activeMenu === 4 ? "bg-slate-400" : ""}`} onClick={() => handleMenuClick(4)}>Nhà Cung Ứng</li>
+                                    </ul>
+                                ) : (
+                                    <ul className='flex flex-col items-start'>
+                                        <li className={`hover:bg-slate-400 cursor-pointer w-full flex items-start pl-5 h-10 ${activeMenu === 1 ? "bg-slate-400" : ""}`} onClick={() => handleMenuClick(1)}>Thông tin chi tiết</li>
+                                        <li className={`hover:bg-slate-400 cursor-pointer w-full flex items-start pl-5 h-10 ${activeMenu === 2 ? "bg-slate-400" : ""}`} onClick={() => handleMenuClick(2)}>Giỏ hàng</li>
+                                        <li className={`hover:bg-slate-400 cursor-pointer w-full flex items-start pl-5 h-10 ${activeMenu === 3 ? "bg-slate-400" : ""}`} onClick={() => handleMenuClick(3)}>Sản phẩm yêu thích</li>
+                                    </ul>
+                                )
+                            }
                         </nav>
                     </div>
                 </div>
@@ -155,7 +165,7 @@ function Dashboard({ userId }) {
                     <div>Loading...</div>
                 ) : (
                     <Content name={name} email={email} phone={phone} address={address}
-                        status={status} activeMenu={activeMenu} brands={brands} />
+                        status={status} activeMenu={activeMenu} brands={brands} role={role} />
                 )}
             </div>
         </div>

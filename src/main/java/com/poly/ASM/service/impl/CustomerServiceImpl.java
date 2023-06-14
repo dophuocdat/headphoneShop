@@ -1,25 +1,30 @@
 package com.poly.ASM.service.impl;
 
+import com.poly.ASM.Validator.CustomerValidator;
 import com.poly.ASM.entity.Customer;
 import com.poly.ASM.exception.CustomerNotFound;
 import com.poly.ASM.repository.CustomerRepository;
 import com.poly.ASM.service.CustomerService;
 import lombok.AllArgsConstructor;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
-
 @Service
-@AllArgsConstructor
 public class CustomerServiceImpl implements CustomerService {
 
-
+    @Autowired
     private CustomerRepository customerRepository;
+
+    @Autowired
+    private CustomerValidator customerValidator;
 
     @Override
     public Customer save(Customer customer) {
+        customerValidator.validateCustomer(customer);
         return customerRepository.save(customer);
     }
 
@@ -57,10 +62,8 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public Customer login(String email, String password) {
-     
-        return customerRepository.findByEmailAndPassword(email,password);
+
+        return customerRepository.findByEmailAndPassword(email, password);
     }
+
 }
-
-
-

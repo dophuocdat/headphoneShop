@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom'
 import EditInfor from './EditInfor';
 
 
-const Content = ({ name, email, phone, address, status, activeMenu, brands }) => {
+const Content = ({ name, email, phone, address, status, activeMenu, brands, role }) => {
 
     const [products, setProduct] = useState([])
 
@@ -31,7 +31,7 @@ const Content = ({ name, email, phone, address, status, activeMenu, brands }) =>
     const [deleteSuccess, setDeleteSuccess] = useState(false);
 
 
-   
+
 
     const loadProduct = async () => {
         await axios.get('http://localhost:8080/products/AllProducts', {
@@ -187,7 +187,7 @@ const Content = ({ name, email, phone, address, status, activeMenu, brands }) =>
             </div>
         )
     }
-    else if (activeMenu === 2) {
+    else if (activeMenu === 2 && role === "ADMIN") {
         return (
             <div className='content w-[90%] bg-slate-200 shadow-xl shadow-slate-400 rounded-md relative'>
                 <div className="option-search">
@@ -299,21 +299,31 @@ const Content = ({ name, email, phone, address, status, activeMenu, brands }) =>
             </div>
         )
     }
-    else if (activeMenu === 3) {
+    else if (activeMenu === 3 && role === 'ADMIN') {
         return (
             <div className='content w-[90%] bg-slate-200 shadow-xl shadow-slate-400 rounded-md'>
                 <AddProduct brands={brands} />
             </div>
         )
     }
-    else if (activeMenu === 4) {
+    else if (activeMenu === 4 && role === 'ADMIN') {
         return (
             <div className='content w-[90%] bg-slate-200 shadow-xl shadow-slate-400 rounded-md'>
                 <AddBrand />
             </div>
         )
-    } else {
-        return null;
+    } else if (activeMenu === 2 && role !== 'ADMIN') {
+        return (
+            <div className='content w-[90%] bg-slate-200 shadow-xl shadow-slate-400 rounded-md'>
+                Giỏi hàng
+            </div>
+        )
+    } else if (activeMenu === 3 && role !== 'ADMIN') {
+        return (
+            <div className='content w-[90%] bg-slate-200 shadow-xl shadow-slate-400 rounded-md'>
+                Yêu thích
+            </div>
+        )
     }
 
 }

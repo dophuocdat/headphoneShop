@@ -4,12 +4,15 @@ import './Recommendations.css'
 import { FcPrevious, FcNext } from 'react-icons/fc'
 import { motion } from "framer-motion";
 import { Link } from 'react-router-dom';
+import axios from 'axios';
 
 function Recommendations() {
 
   const [hoveredItems, setHoveredItems] = useState({});
 
   const [currentIndex, setCurrentIndex] = useState(0);
+
+  const [products, setProducts] = useState([])
 
   const onHover = useCallback(
     (index) => {
@@ -27,12 +30,43 @@ function Recommendations() {
     }, []
   )
   const handlePrevious = () => {
-    setCurrentIndex(currentIndex === 0 ? RecommendationConfig.length - 1 : currentIndex - 1);
+
+    setCurrentIndex(currentIndex === 0 ? products.length - 1 : currentIndex - 1);
+    console.log(currentIndex);
   };
   const handleNext = () => {
-    setCurrentIndex(currentIndex === RecommendationConfig.length - 1 ? 0 : currentIndex + 1);
+
+    setCurrentIndex(currentIndex === products.length - 1 ? 0 : currentIndex + 1);
+    console.log(currentIndex);
   };
 
+  const loadProduct = () => {
+    axios.get('http://localhost:8080/products')
+      .then((res) => {
+        // console.log(res.data);
+        setProducts(res.data);
+       // console.log(products);
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+  }
+
+  useEffect(() => {
+    loadProduct()
+  }, [])
+  
+  const updateProducts = useCallback(() => {
+    if (products.length > 0) {
+      const updatedProducts = [...products];
+      const temp = updatedProducts.splice(currentIndex, updatedProducts.length - currentIndex);
+      setProducts([...temp, ...updatedProducts]);
+    }
+  }, [currentIndex]);
+
+  useEffect(() => {
+    updateProducts();
+  }, [currentIndex, updateProducts]);
 
 
   return (
@@ -44,14 +78,14 @@ function Recommendations() {
       </div>
       <div className='w-[max-content] flex justify-center items-center'>
         {
-          [...RecommendationConfig.slice(currentIndex), ...RecommendationConfig.slice(0, currentIndex)].map((items, index) => {
+          products.map((item, index) => {
             return (
               <div className={`box w-56 h-80 inline-block transition-transform duration-500  cursor-pointer
                hover:rounded-md hover:border-slate-700 hover:shadow-lg`}
                 key={index}
                 data-aos='fade-up'>
                 <div className="h-2/3 relative">
-                  <Link to={items.linkCart + items.id}>
+                  <Link to={"/product/cart/" + item.productId}>
                     <motion.img
                       initial={{ opacity: 0 }}
                       whileInView={{ opacity: 1 }}
@@ -61,20 +95,19 @@ function Recommendations() {
                         ease: 'easeInOut',
 
                       }}
-
-                      src={hoveredItems[index] ? items.hoverImg : items.img} alt=""
+                      src={require(`../../../image/${hoveredItems[index] ? item.imageUrl[0] : item.imageUrl[1]}`)}
                       className='h-full  transition-opacity'
                       onMouseOver={() => onHover(index)}
                       onMouseLeave={() => onMouseOver(index)}
                     />
                   </Link>
                 </div>
-                <div className="detail text-sm">
-                  <span>{items.title}</span>
+                <div className="detail text-sm pt-4">
+                  <span>{item.description}</span>
 
                 </div>
-                <div className="price">
-                  <span>{items.price}</span>
+                <div className="price pt-4">
+                  <span className='font-bold '>${item.price}</span>
                 </div>
 
               </div>

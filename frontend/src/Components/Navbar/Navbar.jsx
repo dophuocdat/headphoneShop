@@ -7,7 +7,7 @@ import { FaBars } from 'react-icons/fa'
 import { AiOutlineCaretDown, AiOutlineCaretUp } from 'react-icons/ai'
 import { BiUserCircle } from 'react-icons/bi'
 
-function Navbar({ isLoggedIn, handleLogout,userId }) {
+function Navbar({ isLoggedIn, handleLogout,userId,role }) {
 
     const [show, setShow] = useState(false)
     const [isDropdown, setIsDropdown] = useState(false);
@@ -142,7 +142,8 @@ function Navbar({ isLoggedIn, handleLogout,userId }) {
                                 }
                             </button>
                             {
-                                isDropdown && (
+                                role === 'ADMIN' ? (
+                                    isDropdown && (
                                     <ul className='absolute top-14  z-50 bg-slate-500 flex flex-col items-start p-2 w-full gap-2'>
                                         <li className='font-light text-sm hover:bg-red-400 w-full flex items-start p-1 cursor-pointer'>
                                             <Link to={'/information/' + userId}>Thông tin tai khoản</Link>
@@ -154,6 +155,18 @@ function Navbar({ isLoggedIn, handleLogout,userId }) {
                                             Logout
                                         </li>
                                     </ul>
+                                )):(
+                                    isDropdown &&(<ul className='absolute top-14  z-50 bg-slate-500 flex flex-col items-start p-2 w-full gap-2'>
+                                        <li className='font-light text-sm hover:bg-red-400 w-full flex items-start p-1 cursor-pointer'>
+                                            <Link to={'/information/' + userId}>Thông tin tai khoản</Link>
+                                        </li>
+                                        <li className='font-light text-sm hover:bg-red-400 w-full flex items-start p-1 cursor-pointer'>Giỏ Hàng</li>
+                                        <li className='font-light text-sm hover:bg-red-400 w-full flex items-start p-1 cursor-pointer'>Danh sach yêu thích</li>
+                                        <li className='font-light text-sm hover:bg-red-400 w-full flex items-start p-1 cursor-pointer' onClick={handleLogout}
+                                        >
+                                            Logout
+                                        </li>
+                                    </ul>)
                                 )
                             }
                         </div>

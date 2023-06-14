@@ -14,14 +14,18 @@ public class CustomerController {
     @Autowired
     private CustomerService customerService;
 
-
-
     @PostMapping("/customers")
     public Customer saveCustomer(@RequestBody Customer customer) {
+        customer.setRoles("USER");
         return customerService.save(customer);
     }
 
-    @RequestMapping("/information/{id}")
+    @PutMapping("/information/{id}")
+    public Customer logout(@PathVariable Long id) {
+        return customerService.findOneCustomer(id);
+    }
+
+    @GetMapping("/information/{id}")
     public Customer getOneCustomer(@PathVariable Long id) {
         return customerService.findOneCustomer(id);
     }
@@ -38,7 +42,8 @@ public class CustomerController {
 
     @PutMapping("/customer/{id}")
     public Customer updateCustomer(@PathVariable Long id,
-                                   @RequestBody Customer newCustomer) {
+            @RequestBody Customer newCustomer) {
         return customerService.updateCustomer(id, newCustomer);
     }
+
 }

@@ -27,22 +27,18 @@ function Account({ isLoggedIn, handleLogin }) {
               const userId = res.data;
               handleLogin(userId); 
               navigate('/');
-              /* localStorage.setItem('token', res.data.token);
-              localStorage.setItem('user', JSON.stringify(res.data.user)); */
+             
             }).catch((err) => {
               console.error(err);
             });
           } catch (error) {
             console.error(error);
-            // Xử lý logic khi đăng nhập thất bại (hiển thị thông báo lỗi, ...)
+           
           }
-           //setIsLoggedIn(true);
+         
     }   
 
-   /*  const handleLogout =() =>{
-        setIsLoggedIn(false)
-    } */
-
+  
     return (
         <div className='account-controller py-16 '>
             <div className="flex justify-center flex-col items-center pb-10">
@@ -60,12 +56,17 @@ function Account({ isLoggedIn, handleLogin }) {
                         </div>
                         <div className='flex gap-3 justify-center'>
                             <a href="/" className='text-red-600 underline'>Forgot your password?</a> Or
-                            <a href='/' className='text-red-600 underline'>Create an account</a>
+                            <Link to={"/signup"} className='text-red-600 underline'>Create an account</Link>
                         </div>
 
                         <div className="flex gap-10 justify-center">
-                            <button type='submit' className='border-2 border-gray-500 outline-indigo-500 rounded-lg w-1/4 h-10 hover:bg-blue-500  hover:text-white text-lg font-medium'>Login</button>
-                            <Link to={'/'} className='border-2 border-gray-500 outline-indigo-500 rounded-lg w-1/4 h-10 hover:bg-red-600 hover:text-white text-lg font-medium'>Cancel</Link>
+                            <button type='submit' 
+                            className='border-2 border-gray-500 outline-indigo-500 rounded-lg 
+                            w-1/4 h-10 hover:bg-blue-500  hover:text-white text-lg font-medium'>
+                            Login</button>
+                            <Link to={'/'} className='border-2
+                             border-gray-500 outline-indigo-500 rounded-lg w-1/4 h-10
+                              hover:bg-red-600 hover:text-white text-lg font-medium'>Cancel</Link>
                         </div>
 
                     </div>

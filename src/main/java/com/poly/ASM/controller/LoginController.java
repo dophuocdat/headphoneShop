@@ -45,6 +45,6 @@ public class LoginController {
             return ResponseEntity.ok().body(id + "");
         }
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Customer not found");
-
     }
+    
 }

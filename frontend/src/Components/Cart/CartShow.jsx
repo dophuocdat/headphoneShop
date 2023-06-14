@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { RecommendationConfig } from "../ListProduct/Recommentdations/RecommendationConfig"
 import { FaTrophy } from "react-icons/fa"
@@ -9,11 +9,13 @@ import { comment } from './commentConfig'
 import Tab from './Tab'
 import TabContent from './TabContent'
 import { contentProduct } from './contentProduct'
+import axios from 'axios'
+import { format } from 'date-fns';
+
 
 function CartShow() {
 
   const { id } = useParams();
-  const product = RecommendationConfig.find(product => product.id === id);
 
   const [countProduct, setCountProduct] = useState(1);
 
@@ -21,17 +23,52 @@ function CartShow() {
 
   const [activeTab, setActiveTab] = useState(0);
 
+  const [product, setProduct] = useState([])
+
+  const idCustomer = localStorage.getItem('userId');
+  const currentDate = format(new Date(), 'yyyy-MM-dd')
+
   const handleTabClick = (index) => {
     setActiveTab(index);
   }
-
-
-
   const onImageChange = (event) => {
     if (event.target.files && event.target.files[0]) {
       setImage(URL.createObjectURL(event.target.files[0]))
     }
   }
+
+  const loadProduct = async (id) => {
+    console.log(id);
+    await axios.get(`http://localhost:8080/products/product/${id}`)
+      .then((res) => {
+        // console.log(res.data);
+        setProduct(res.data);
+        // console.log(product);
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+  }
+
+  useEffect(() => {
+    loadProduct(id);
+    // console.log(product);
+  }, [])
+
+  useEffect(() => {
+    //  console.log(product);
+  }, [product]);
+
+
+  const submitOrder = () => {
+    axios.post(`http://localhost:8080/orders/${idCustomer}`,{currentDate} )
+      .then((res) => {
+        console.log(res.data);
+      }).catch((err) => {
+        console.log(err);
+      })
+  }
+
 
 
 
@@ -40,18 +77,23 @@ function CartShow() {
       <div className="grid grid-cols-2  gap-4 max-md:grid-cols-1 max-md:place-items-center">
         <div className="show-product">
           <div className="show-img flex items-end justify-end  mr-20 max-md:mr-0 w-[300px]">
-            <img src={product.img} alt="" className='border-1 border-gray-300 drop-shadow-xl shadow-slate-500 w-[300px] ' />
+            {product.imageUrl?.length > 0 && (
+              <img src={require(`../../image/${product.imageUrl[0]}`)} alt="" className='border-1 border-gray-300 drop-shadow-xl shadow-slate-500 w-[300px]' />
+            )}
           </div>
         </div>
         <div className="grid grid-rows-4 grid-cols-1 text-start w-[300px]">
           <div className="show-name border-t border-slate-900 flex items-center ">
-            <h1 className='text-lg font-bold'>{product.title}</h1>
+            <h1 className='text-lg font-bold'>{product.name}</h1>
           </div>
           <div className="show-price border-t border-slate-900">
             <div className='flex items-center gap-3'>
               <h1 className='text-red-600 text-[2rem]'>{product.price}</h1>
-              <span className='border-2 border-slate-500 w-2 '></span>
-              <h1 className={`${product.oldPrice ? 'block' : 'hidden'} line-through text-slate-500 text-[1.5rem]`}>
+              {
+                product.oldPrice === 0 ? <span className='border-2 border-slate-500 w-2 '></span> : null
+              }
+
+              <h1 className={`${product.oldPrice !== 0 ? 'block' : 'hidden'} line-through text-slate-500 text-[1.5rem]`}>
                 {product.oldPrice}</h1>
 
             </div>
@@ -79,19 +121,13 @@ function CartShow() {
             </div>
             <button className='font-bold bg-blue-900  h-10 w-full rounded-lg text-slate-300
              hover:bg-blue-800 hover:text-white hover:scale-95
-             transition-colors duration-500 ease-linear'>Add to cart</button>
+             transition-colors duration-500 ease-linear'
+              onClick={submitOrder}>Add to cart</button>
           </div>
 
         </div>
       </div>
       <div className='tabs-detail'>
-        {/* <ul className='flex justify-start gap-3'>
-          <li className={`bg-slate-400 px-2 h-10 flex items-center cursor-pointer  hover:bg-slate-600 text-white `}
-          >PRODUCT DETAILS FROM THE BRAND</li>
-          <li className={`bg-slate-400 px-2 h-10 flex items-center cursor-pointer  hover:bg-slate-600 text-white`}
-          >PRODUCT REVIEWS</li>
-
-        </ul> */}
         <div className='flex flex-row gap-1'>
           <Tab active={activeTab === 0} onClick={() => handleTabClick(0)} > PRODUCT DETAILS FROM THE BRAND </Tab>
           <Tab active={activeTab === 1} onClick={() => handleTabClick(1)} >PRODUCT REVIEWS</Tab>
