@@ -1,11 +1,10 @@
 package com.poly.ASM.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.List;
 
@@ -14,7 +13,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
+@JsonIgnoreProperties("customer")
 public class Customer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,7 +28,9 @@ public class Customer {
     private String avatar;
     private boolean status;
     
-    @OneToMany(mappedBy = "customerId")
+    @OneToMany(mappedBy = "customer")
+    @JsonIgnore
+    @ToString.Exclude
     private List<Order> orders;
 
     @OneToMany(mappedBy = "customer")

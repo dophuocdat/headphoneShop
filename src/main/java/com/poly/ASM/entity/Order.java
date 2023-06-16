@@ -1,38 +1,42 @@
 package com.poly.ASM.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
-import java.time.LocalDate;
+
 import java.util.Date;
 import java.util.List;
-
-
 
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "`order`")
+@Table(name = "orderProduct")
+@JsonIgnoreProperties("orders")
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long orderId;
 
-/*     @Column(name="customer_id") */
-    @ManyToOne()
-    @JoinColumn(name = "customer_id")
-    private Customer customerId;
 
-    @Temporal(TemporalType.DATE)    
+    @ManyToOne
+    @JoinColumn(name = "customer_id")
+    @JsonIgnoreProperties("orders")
+    @ToString.Exclude
+    private Customer customer;
+
+
+    @Temporal(TemporalType.DATE)
     @Column(name = "order_date")
     private Date orderDate;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+    @ToString.Exclude
     private List<OrderDetails> orderDetails;
-
-  
 }

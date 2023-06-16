@@ -5,6 +5,7 @@ import AddProduct from './AddProduct';
 import AddBrand from './AddBrand';
 import { Link } from 'react-router-dom'
 import EditInfor from './EditInfor';
+import Cart from './Cart';
 
 
 const Content = ({ name, email, phone, address, status, activeMenu, brands, role }) => {
@@ -315,7 +316,7 @@ const Content = ({ name, email, phone, address, status, activeMenu, brands, role
     } else if (activeMenu === 2 && role !== 'ADMIN') {
         return (
             <div className='content w-[90%] bg-slate-200 shadow-xl shadow-slate-400 rounded-md'>
-                Giỏi hàng
+               <Cart/>
             </div>
         )
     } else if (activeMenu === 3 && role !== 'ADMIN') {

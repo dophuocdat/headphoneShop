@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { RecommendationConfig } from "../ListProduct/Recommentdations/RecommendationConfig"
 import { FaTrophy } from "react-icons/fa"
 import { AiOutlinePlus, AiOutlineMinus } from "react-icons/ai"
 import { BiImageAdd } from 'react-icons/bi'
@@ -11,6 +10,7 @@ import TabContent from './TabContent'
 import { contentProduct } from './contentProduct'
 import axios from 'axios'
 import { format } from 'date-fns';
+import FromComfirm from './form'
 
 
 function CartShow() {
@@ -24,6 +24,13 @@ function CartShow() {
   const [activeTab, setActiveTab] = useState(0);
 
   const [product, setProduct] = useState([])
+
+  const [comfirm, setComfirm] = useState(null);
+
+  const [idOrder, setIdOrder] = useState(null);
+
+  const [message, setMessage] = useState(null);
+
 
   const idCustomer = localStorage.getItem('userId');
   const currentDate = format(new Date(), 'yyyy-MM-dd')
@@ -41,7 +48,7 @@ function CartShow() {
     console.log(id);
     await axios.get(`http://localhost:8080/products/product/${id}`)
       .then((res) => {
-        // console.log(res.data);
+        //console.log(res.data);
         setProduct(res.data);
         // console.log(product);
       })
@@ -61,20 +68,56 @@ function CartShow() {
 
 
   const submitOrder = () => {
-    axios.post(`http://localhost:8080/orders/${idCustomer}`,{currentDate} )
+    setComfirm(true);
+    const payload = {
+      orderDate: currentDate,
+    };
+    axios.post(`http://localhost:8080/orders/${idCustomer}`, payload)
       .then((res) => {
-        console.log(res.data);
+        /*  console.log(payload);*/
+        //console.log(res.data.orderId);
+        setIdOrder(res.data.orderId);
       }).catch((err) => {
         console.log(err);
       })
   }
 
 
+  const cancelOrder = () => {
+    axios.delete(`http://localhost:8080/orders/${idOrder}`)
+      .then((res) => {
+
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+    setComfirm(false);
+  }
+
+  const buyProduct = () => {
+    console.log(product.productId);
+    const payload = {
+      product: product,
+      quantity: countProduct,
+      price: countProduct * product.price
+    };
+    console.log(payload);
+    axios.post(`http://localhost:8080/orderDetails/${idOrder}/create`, payload)
+      .then((res) => {
+        console.log(res.data);
+        setMessage('Order success');
+        setComfirm(false);
+      })
+      .catch((err) => {
+        setMessage('Order fail');
+        console.log(err);
+      })
+  }
 
 
   return (
     <div className='cart-container  mx-80  max-xl:mx-40 max-lg:mx-20  py-10'>
-      <div className="grid grid-cols-2  gap-4 max-md:grid-cols-1 max-md:place-items-center">
+      <div className="grid grid-cols-2  gap-4 max-md:grid-cols-1 max-md:place-items-center relative">
         <div className="show-product">
           <div className="show-img flex items-end justify-end  mr-20 max-md:mr-0 w-[300px]">
             {product.imageUrl?.length > 0 && (
@@ -82,7 +125,7 @@ function CartShow() {
             )}
           </div>
         </div>
-        <div className="grid grid-rows-4 grid-cols-1 text-start w-[300px]">
+        <div className="grid grid-rows-4 grid-cols-1 text-start w-[300px] ">
           <div className="show-name border-t border-slate-900 flex items-center ">
             <h1 className='text-lg font-bold'>{product.name}</h1>
           </div>
@@ -107,7 +150,9 @@ function CartShow() {
             <div className='count-product flex py-8 gap-1'>
               <button className='outline outline-2 rounded-md w-10 h-10 flex items-center justify-center hover:outline-blue-600 hover:scale-105'
                 onClick={() => {
-                  setCountProduct(countProduct - 1)
+                  if (countProduct > 1) {
+                    setCountProduct(countProduct - 1);
+                  }
                 }}>
                 <AiOutlineMinus />
               </button>
@@ -124,8 +169,31 @@ function CartShow() {
              transition-colors duration-500 ease-linear'
               onClick={submitOrder}>Add to cart</button>
           </div>
-
         </div>
+
+
+        {/* Comfirm */}
+        {
+          message && message.length > 0 ? <div className='absolute top-0 left-0 w-full h-full bg-gray-500 bg-opacity-50 flex items-center justify-center rounded-lg'>
+            <div className='bg-white w-[400px] h-[200px] flex flex-col items-center justify-center gap-3 '>
+              <h1 className='text-2xl font-bold'>{message}</h1>
+              <button className='bg-blue-900 text-white w-[100px] h-[40px] rounded-lg hover:bg-blue-800 hover:scale-95
+              transition-colors duration-500 ease-linea'
+                onClick={() => {
+                  setMessage('');
+                }
+                }>OK</button>
+            </div>
+          </div> : null
+
+        }
+
+        {
+          comfirm === true ? <FromComfirm onCancel={cancelOrder} count={countProduct} name={product.name}
+            price={product.price} buy={buyProduct}></FromComfirm> : null
+        }
+
+
       </div>
       <div className='tabs-detail'>
         <div className='flex flex-row gap-1'>
