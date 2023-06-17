@@ -9,5 +9,7 @@ public interface OrderDetailsService {
     List<OrderDetails> getOrderDetails();
 
     void createOrderDetails(Long orderId, OrderDetails orderDetailsOrder);
+
+    void deleteOrderDetails(Long id);
     
 }

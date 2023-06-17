@@ -75,7 +75,7 @@ function CartShow() {
     axios.post(`http://localhost:8080/orders/${idCustomer}`, payload)
       .then((res) => {
         /*  console.log(payload);*/
-        //console.log(res.data.orderId);
+        //console.log(res.data);
         setIdOrder(res.data.orderId);
       }).catch((err) => {
         console.log(err);
@@ -104,7 +104,7 @@ function CartShow() {
     console.log(payload);
     axios.post(`http://localhost:8080/orderDetails/${idOrder}/create`, payload)
       .then((res) => {
-        console.log(res.data);
+        //console.log(res.data);
         setMessage('Order success');
         setComfirm(false);
       })

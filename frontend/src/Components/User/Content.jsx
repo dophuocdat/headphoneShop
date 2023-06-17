@@ -27,7 +27,6 @@ const Content = ({ name, email, phone, address, status, activeMenu, brands, role
     const [searchByPriceMin, setSearchByPriceMin] = useState("");
     const [searchByPriceMax, setSearchByPriceMax] = useState("");
     const [searchByBrand, setSearchByBrand] = useState("");
-
     //reload table when delete
     const [deleteSuccess, setDeleteSuccess] = useState(false);
 

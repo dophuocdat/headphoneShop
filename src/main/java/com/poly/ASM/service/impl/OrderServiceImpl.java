@@ -7,7 +7,11 @@ import com.poly.ASM.entity.Customer;
 import com.poly.ASM.repository.CustomerRepository;
 import com.poly.ASM.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.poly.ASM.entity.Order;
 import com.poly.ASM.repository.OrderRepository;
@@ -40,12 +44,18 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public Order createOrder(Long id, Order order) {
-        Optional<Customer> customer = customerRepository.findById(id);
-        if(customer.isPresent()){
-            order.setCustomer(customer.get());
-           return orderRepository.save(order);
+        Optional<Customer> existingCustomer = customerRepository.findById(id);
+        Optional<Order> existingOrder = orderRepository.findByCustomerId(id);
+        System.out.println("order: " + existingOrder);
+        if (!existingOrder.isPresent()) {
+            order.setCustomer(existingCustomer.get());
+            orderRepository.save(order);
+
+            return order;
+        } else {
+            return existingOrder.get();
         }
-        return null;
+
     }
 
     @Override
@@ -53,5 +63,9 @@ public class OrderServiceImpl implements OrderService {
         orderRepository.deleteById(id);
     }
 
+    @Override
+    public Page<Order> getOrder(Long id, Pageable pageable) {
+        return orderRepository.findByCustomerId(id, pageable);
+    }
 
 }
