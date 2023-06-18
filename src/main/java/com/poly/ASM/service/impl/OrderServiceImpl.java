@@ -4,7 +4,9 @@ import java.util.List;
 import java.util.Optional;
 
 import com.poly.ASM.entity.Customer;
+import com.poly.ASM.entity.OrderDetails;
 import com.poly.ASM.repository.CustomerRepository;
+import com.poly.ASM.repository.OrderDetailsRepository;
 import com.poly.ASM.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -26,10 +28,13 @@ public class OrderServiceImpl implements OrderService {
     OrderRepository orderRepository;
     CustomerRepository customerRepository;
 
+    OrderDetailsRepository orderDetailsRepository;
+
     @Autowired
-    public OrderServiceImpl(OrderRepository orderRepository, CustomerRepository customerRepository) {
+    public OrderServiceImpl(OrderRepository orderRepository, CustomerRepository customerRepository,OrderDetailsRepository orderDetailsRepository) {
         this.orderRepository = orderRepository;
         this.customerRepository = customerRepository;
+        this.orderDetailsRepository = orderDetailsRepository;
     }
 
     @Override
@@ -67,5 +72,10 @@ public class OrderServiceImpl implements OrderService {
     public Page<Order> getOrder(Long id, Pageable pageable) {
         return orderRepository.findByCustomerId(id, pageable);
     }
+
+   @Override
+    public Page<OrderDetails> getOrderDetails(Long orderId, Pageable pageable) {
+       return orderDetailsRepository.findByOrderDetails(orderId, pageable);
+   }
 
 }

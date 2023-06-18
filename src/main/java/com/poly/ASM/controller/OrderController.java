@@ -3,6 +3,8 @@ package com.poly.ASM.controller;
 import java.util.List;
 import java.util.Optional;
 
+import com.poly.ASM.entity.DTO.OrderDto;
+import com.poly.ASM.entity.OrderDetails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -35,7 +37,7 @@ public class OrderController {
 
     @PostMapping("/{idCustomer}")
     public Order createOrder(@PathVariable Long idCustomer, @RequestBody Order order) {
-        
+
         return orderService.createOrder(idCustomer, order);
     }
 
@@ -46,16 +48,40 @@ public class OrderController {
     }
 
     @GetMapping("/{id}")
-    public Page<Order> getOrder(
+    public OrderDto getOrder(
             @PathVariable Long id,
-            @RequestParam(name = "page", defaultValue = "0") int page,
-            @RequestParam(name = "pageSize", defaultValue = "5") int size,
+            @RequestParam(name = "orderPage", defaultValue = "0") int orderPages,
+            @RequestParam(name = "orderPageSize", defaultValue = "5") int orderPageSize,
+            @RequestParam(name = "orderDetailsPage", defaultValue = "0") int orderDetailsPage,
+            @RequestParam(name = "orderDetailsPageSize", defaultValue = "5") int orderDetailsPageSize,
             @RequestParam("sortField") Optional<String> sortField,
             @RequestParam("sortDirection") Optional<String> sortDirection) {
         Sort sort = Sort.by(Sort.Direction.DESC, sortField.orElse("orderId"));
-        Pageable pageable = PageRequest.of(page, size, sort);
 
-        return orderService.getOrder(id, pageable);
+        // Tạo Pageable cho trang Order
+        Pageable orderPageable = PageRequest.of(orderPages, orderPageSize, sort);
+        Page<Order> orderPage = orderService.getOrder(id, orderPageable);
+
+        OrderDto orderDto = new OrderDto();
+        if (orderPage.hasContent()) {
+            Order order = orderPage.getContent().get(0);
+            orderDto.setOrder(order);
+
+            // Tạo Pageable cho trang OrderDetails
+            Pageable orderDetailsPageable = PageRequest.of(orderDetailsPage, orderDetailsPageSize);
+            Page<OrderDetails> orderDetailPage = orderService.getOrderDetails(order.getOrderId(), orderDetailsPageable);
+            orderDto.setOrderDetails(orderDetailPage);
+        }
+
+        return orderDto;
+    }
+
+    @GetMapping("check")
+    public Page<OrderDetails> getOrderDetails() {
+        // Sort sort = Sort.by(Sort.Direction.DESC, sortField.orElse("orderId"));
+        Pageable pageable = PageRequest.of(0, 5);
+        Page<OrderDetails> orderDetailPage = orderService.getOrderDetails(7l, pageable);
+        return orderDetailPage;
     }
 
     @DeleteMapping("/{id}/delete")

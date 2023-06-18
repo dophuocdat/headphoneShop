@@ -101,13 +101,15 @@ function Recommendations() {
   }
 
 
-  const wishlist = (idCustomer) => {
+  const wishlist = async (idproduct, idCustomer) => {
+    getProduct(idproduct);
+    getCustomer(idCustomer)
     //console.log(idCustomer);
     const rqBody = {
       customer: oneCustomer,
       products: [oneProduct]
     };
-    axios.post(`http://localhost:8080/wishlist/${idCustomer}/create`, rqBody)
+    await axios.post(`http://localhost:8080/wishlist/${idCustomer}/create`, rqBody)
       .then((res) => {
         console.log(res.data)
       })
@@ -117,8 +119,13 @@ function Recommendations() {
   }
 
   const unWishlist = (idProduct) => {
-
-    axios.post(`http://localhost:8080/wishlist/${idProduct}/delete`)
+    axios.delete(`http://localhost:8080/wishlist/${idProduct}`)
+      .then((res) => {
+        console.log(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      })
   }
 
 
@@ -131,14 +138,11 @@ function Recommendations() {
     if (!likedItems[index]) {
       // User liked the product
       setLikedProducts((prev) => [...prev, id]);
-      console.log("like");
-      getProduct(id);
-      getCustomer(idCustomer)
-      // console.log(oneProduct);
-      wishlist(idCustomer);
+
+      wishlist(id, idCustomer);
     } else {
       setLikedProducts((prev) => prev.filter((productId) => productId !== id));
-
+      unWishlist(id)
       console.log("unlike");
     }
   };
@@ -163,7 +167,7 @@ function Recommendations() {
       </div>
       <div className='w-[max-content] flex justify-center items-center'>
         {
-          products.map((item, index) => { 
+          products.map((item, index) => {
             return (
               <div className={`box w-56 h-80 inline-block transition-transform duration-500  cursor-pointer
                hover:rounded-md hover:border-slate-700 hover:shadow-lg`}
@@ -209,15 +213,7 @@ function Recommendations() {
                       )}
                     </button>
                   </div>
-                  {/*  <button className='w-10 h-10 bg-slate-200 flex items-center justify-center rounded-lg
-                    hover:bg-stone-600'>
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-gray-500 hover:text-stone-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M19 19a3 3 0 01-2.824-2H7.824A3 3 0 015 19V9a2 2 0 012-2h10a2 2 0 012 2v10z" />
-                    </svg>
-                  </button> */}
                 </div>
-
               </div>
             )
           })

@@ -21,5 +21,6 @@ public interface OrderService {
 
     Page<Order> getOrder(Long id, Pageable pageable);
 
-    
+
+    Page<OrderDetails> getOrderDetails(Long orderId, Pageable pageable);
 }

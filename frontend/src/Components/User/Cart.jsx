@@ -6,24 +6,27 @@ const Cart = () => {
     const storedUserId = localStorage.getItem('userId');
     const [cart, setCart] = useState([]);
     const [currentPage, setCurrentPage] = useState(0);
-    const [pageSize, setPageSize] = useState(4);
+    const [pageSize, setPageSize] = useState(5);
     const [sortField, setSortField] = useState(null);
     // const [sortDirection, setSortDirection] = useState("DESC")
     const [totalPages, setTotalPages] = useState(0);
+    const [dateOrder, setDateOrder] = useState(null)
     const [message, setMessage] = useState(null);
+
     const loadCart = (id) => {
         axios.get(`http://localhost:8080/orders/${id}`,
             {
                 params: {
-                    page: currentPage,
-                    pageSize: pageSize,
+                    orderDetailsPage: currentPage,
+                    orderDetailsPageSize: pageSize,
                     sortField: sortField
                 }
             })
             .then((res) => {
                 // console.log(res.data.content);
-                setCart(res.data.content);
-                setTotalPages(res.data.totalPages);
+                setCart(res.data.orderDetails.content);
+                setDateOrder(res.data.order.orderDate);
+                setTotalPages(res.data.orderDetails.totalPages);
             })
             .catch((err) => {
                 console.log(err);
@@ -45,24 +48,32 @@ const Cart = () => {
         loadCart(storedUserId);
         //console.log(cart);
     }, [currentPage, pageSize, sortField])
-
+/* 
+    useEffect(() => {
+        console.log(dateOrder);
+    }, [dateOrder]);
+ */
     const handleNextPage = () => {
-        if (currentPage < totalPages - 1) {
-            setCurrentPage(currentPage + 1);
-        }
+
+        setCurrentPage((prevPage) => prevPage + 1);
+        console.log(currentPage)
+
     }
     const handlePreviousPage = () => {
         if (currentPage > 0) {
             setCurrentPage((prevPage) => prevPage - 1);
+            console.log(currentPage)
         }
     };
 
     const handleFirstPage = () => {
         setCurrentPage(0);
+        console.log(currentPage)
     };
 
     const handleLastPage = () => {
         setCurrentPage(totalPages - 1);
+        console.log(currentPage)
     };
     return (
         <div>
@@ -98,39 +109,38 @@ const Cart = () => {
                         </thead>
                         <tbody>
                             {
-                                cart.map((item) => {
-                                    return item.orderDetails.map((detail) => {
-                                        return (
-                                            <tr key={detail.id}>
-                                                <td className='table-tbody'>{detail.id}</td>
-                                                <td className='table-tbody'>{item.orderDate}</td>
-                                                <td className='table-tbody'>{detail.product.name}</td>
-                                                <td className='table-tbody'>
-                                                    {detail.product.imageUrl?.length > 0 && (
-                                                        <div className='flex w-full items-center justify-center'>
-                                                            <img title={detail.id}
-                                                                src={require(`../../image/${detail.product.imageUrl[1]}`)}
-                                                                alt=''
-                                                                className='w-20 h-20 mix-blend-multiply'
-                                                            />
-                                                        </div>
-                                                    )}
-                                                </td>
-                                                <td className='table-tbody'>{detail.product.description}</td>
-                                                <td className='table-tbody'>{detail.product.price}</td>
-                                                <td className='table-tbody'>{detail.quantity}</td>
-                                                <td className='table-tbody'>{detail.price}</td>
-                                                <td className='table-tbody'>
-                                                    <div className='flex gap-2 items-center justify-center'>
-                                                        <button className='btn-update'>Sửa</button>
-                                                        <button className='btn-delete' onClick={() => deleteOrder(detail.id)}>
-                                                            Hủy
-                                                        </button>
+                                cart.map((item, index) => {
+                                    return (
+                                        <tr key={index}>
+                                            <td className='table-tbody'>{item.id}</td>
+                                            <td className='table-tbody'>{dateOrder}</td>
+                                            <td className='table-tbody'>{item.product.name}</td>
+                                            <td className='table-tbody'>
+                                                {item.product.imageUrl?.length > 0 && (
+                                                    <div className='flex w-full items-center justify-center'>
+                                                        <img title={item.id}
+                                                            src={require(`../../image/${item.product.imageUrl[1]}`)}
+                                                            alt=''
+                                                            className='w-20 h-20 mix-blend-multiply'
+                                                        />
                                                     </div>
-                                                </td>
-                                            </tr>
-                                        );
-                                    });
+                                                )}
+                                            </td>
+                                            <td className='table-tbody'>{item.product.description}</td>
+                                            <td className='table-tbody'>{item.product.price}</td>
+                                            <td className='table-tbody'>{item.quantity}</td>
+                                            <td className='table-tbody'>{item.price}</td>
+                                            <td className='table-tbody'>
+                                                <div className='flex gap-2 items-center justify-center'>
+                                                    <button className='btn-update'>Sửa</button>
+                                                    <button className='btn-delete' onClick={() => deleteOrder(item.id)}>
+                                                        Hủy
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    );
+
                                 })
                             }
 
